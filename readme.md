@@ -1,0 +1,1 @@
+<h1>Blog using laravel MVC</h1>
