@@ -7,8 +7,8 @@
 MAIL_DRIVER=smtp
 MAIL_HOST=smtp.gmail.com
 MAIL_PORT=465
-MAIL_USERNAME=testfaifoo@gmail.com(Your email) <span>If you using google account please change turn off "2-step Verification" and turn on option "Less secure app access</span>
-MAIL_PASSWORD=*********(This is my password so i can't not show it:D)
+MAIL_USERNAME=example@gmail.com(Your e-mail) <span>If you using google account please change turn off "2-step Verification" and turn on option "Less secure app access</span>
+MAIL_PASSWORD=123456(Your password e-mail)
 MAIL_ENCRYPTION=ssl
 </code>
 </pre>
