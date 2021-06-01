@@ -12,3 +12,6 @@ MAIL_PASSWORD=123456(Your password e-mail)
 MAIL_ENCRYPTION=ssl
 </code>
 </pre>
+
+<p>Sending mail forgot pass and reset new password are in UserController</p>
+<p>Script ajax in "app/public/js"</p>
