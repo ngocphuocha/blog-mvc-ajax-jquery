@@ -1,4 +1,4 @@
-<h1>Blog using laravel MVC using ajax jquery + API</h1>
+<h1>Blog using laravel MVC using ajax jquery + API and using TailwinCSS</h1>
 <p>This project have function: User reset password via mail</p>
 
 <h1 class="color:red;">Set up your .env file for using google mail service</h1>
