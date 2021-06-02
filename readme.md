@@ -8,8 +8,8 @@
 MAIL_DRIVER=smtp
 MAIL_HOST=smtp.gmail.com
 MAIL_PORT=465
-MAIL_USERNAME=example@gmail.com(Your e-mail)
-MAIL_PASSWORD=123456(Your password e-mail)
+MAIL_USERNAME=example@gmail.com (Your e-mail)
+MAIL_PASSWORD=examplepassword (Your password e-mail)
 MAIL_ENCRYPTION=ssl
 </code>
 </pre>
