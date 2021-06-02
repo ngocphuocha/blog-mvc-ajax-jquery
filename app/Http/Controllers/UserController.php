@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -16,8 +17,22 @@ class UserController extends Controller
 
     public function sendEmailResetPass(Request $request)
     {
-        $user = User::where('email', $request->only('email'))->select('id', 'email', 'name')->get();
-        if (count($user)) {
+        $email = $request->input('email'); // Get emaill field
+        $validator = Validator::make($request->all(), [
+            'email' => [
+                'required',
+                function ($attribute, $value, $fail) use ($email) {
+                    $value = User::where('email', $email)->select('email')->get();
+                    if (count($value) === 0) {
+                        $fail('The ' . $attribute . ' is not found in resources. Please try again!');
+                    }
+                }
+            ]
+        ]);
+        if ($validator->fails()) {
+            return response()->json([$validator->errors()], 400);
+        } else {
+            $user = User::where('email', $request->input('email'))->select('id', 'email', 'name')->get();
             $id = $user[0]->id;
             $data = [];
             // Generate new link for reset password
@@ -33,8 +48,6 @@ class UserController extends Controller
 
             // if success
             return response()->json(['email' => $data['email']]);
-        } else {
-            return response()->json(['error' => 'This mail was not found in application system, please try again!', 'email' => $request->input('email')], 404);
         }
     }
 
@@ -45,9 +58,15 @@ class UserController extends Controller
 
     public function changePass($id, Request $request)
     {
-        $password = $request->input('password');
-        User::where('id', $id)->update(['password' => $password]);
-
-        return view('success.reset-pass');
+        $validator = Validator::make($request->all(), [
+            'password' => 'required|confirmed|min:15|max:25'
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        } else {
+            $password = $request->input('password');
+            $user = User::where('id', $id)->update(['password' => $password]);
+            return response()->json($user, 200);
+        }
     }
 }
