@@ -65,6 +65,7 @@ class UserController extends Controller
             return response()->json($validator->errors(), 400);
         } else {
             $password = $request->input('password');
+            $password = bcrypt($password);
             $user = User::where('id', $id)->update(['password' => $password]);
             return response()->json($user, 200);
         }
