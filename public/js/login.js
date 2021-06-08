@@ -19,12 +19,24 @@ $(document).ready(function () {
             },
             dataType: "json",
             success: function (response) {
-                location.reload();
+                window.location.replace("http://demolravel.test/products");
             },
 
             error: function (response) {
-                var html = '<p>Checking</p>';
+                var err = JSON.parse(response.responseText);
+                console.log(err.error);
+
+                $.each(err.error, function (key, value) {
+                    if (key == 'email') {
+                        $("#email-error").text(value[0]);
+                    }
+
+                    if (key == 'password') {
+                        $("#password-error").text(value[0]);
+                    }
+                });
             }
+
         });
     });
 });
