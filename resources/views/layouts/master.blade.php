@@ -24,7 +24,7 @@
                 <ul class="flex flex-row justify-end">
                     @auth
                     <ul class="flex flex-row justify-end">
-                        <li class="p-2 my-1">{{\Auth::user()->name}}</li>
+                        <li class="p-2 my-1"><span class="material-icons  ">face</span>{{\Auth::user()->name}}</li>
                         <form id="logout-form" action="{{ route('logout') }}" method="post">
                             {{ csrf_field() }}
                             <input
@@ -66,9 +66,11 @@
                     </li>
 
                     {{-- Cart --}}
+
                     <li>
                         <a class="px-5 transition duration-150 ease-out hover:text-red-500"
-                            href="{{ route('carts.index') }}">View cart
+                            href="{{ route('carts.index') }}">
+                            View cart
                         </a>
                     </li>
 

@@ -19,6 +19,10 @@
 </div>
 <div class="container mt-20 mx-auto grid grid-cols-1 gap-y-10 gap-4">
     @if(!empty($product))
+    @php
+    $tempPrice = $product->price;
+    $product->price -= floor(15*$product->price / 100);
+    @endphp
     <div
         class="mx-auto flex flex-col justify-between border-4 border-blue-300 border-opacity-75 rounded-lg transform transition duration-300 ease-liner hover:scale-105 hover:border-pink-300 bg-blue-100 w-3/4">
         <div>
@@ -29,13 +33,18 @@
                 <p class="p-2">Còn lại: {{ $product->quantity }} sản phẩm</p>
             </div>
             <div>
-                <p class="p-2">Giá: {{ $product->price . ' VND' }}</p>
+                <p class="p-2">Giá gốc: <span class="line-through text-red-500">{{ $tempPrice . ' VND' }}</span></p>
+            </div>
+            <div>
+                <p class="p-2">Giá khuyến mãi: {{ $product->price . ' VND' }}</p>
             </div>
         </div>
 
         <div class="text-center">
             <form id="add-cart" class="flex flex-col" action="{{ route('carts.store') }}" method="post">
                 @csrf
+                {{-- Product ID --}}
+                <input type="hidden" name="id" value="{{ $product->id }}">
                 {{-- Name --}}
                 <input type="hidden" name="product_name" id="product_name" value="{{ $product->name }}">
                 {{-- Enter quantity to buy --}}
