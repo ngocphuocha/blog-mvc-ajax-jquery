@@ -13,8 +13,8 @@
     <!-- Tailwind css -->
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 
-    <!-- Jquery ajax -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
 </head>
 
 <body>
@@ -24,7 +24,7 @@
                 <ul class="flex flex-row justify-end">
                     @auth
                     <ul class="flex flex-row justify-end">
-                        <li class="p-2 my-1"><span class="material-icons  ">face</span>{{\Auth::user()->name}}</li>
+                        <li class="p-2 my-1">{{\Auth::user()->name}}</li>
                         <form id="logout-form" action="{{ route('logout') }}" method="post">
                             {{ csrf_field() }}
                             <input
@@ -36,7 +36,7 @@
                     @endauth
                     @guest
                     <li><a href="{{ route('login') }}" class="p-2">Login</a></li>
-                    <li><a class="p-2">Register</a></li>
+                    <li><a href="{{ asset('register') }}" class="p-2">Register</a></li>
                     @endguest
 
                 </ul>
@@ -95,6 +95,8 @@
     </main>
     <footer></footer>
     <!-- Script -->
+    <!-- Jquery ajax -->
+    <script src="{{ asset('js/jquery/jquery-3.6.0.min.js') }}"></script>
     @yield('js')
 </body>
 

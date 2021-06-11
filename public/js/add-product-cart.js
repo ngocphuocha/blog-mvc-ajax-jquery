@@ -7,7 +7,6 @@ $(document).ready(function () {
         var price = $("input[name='price']").val();
         var quantity = $("input[name='quantity']").val();
         var token = $("input[name='_token']").val();
-        console.log(product_id);
         $.ajax({
             type: "post",
             url: url,
