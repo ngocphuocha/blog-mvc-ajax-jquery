@@ -17,7 +17,6 @@ Route::get('/', function () {
     return view('home-page');
 });
 
-Route::resource('categories', 'CategoryController');
 Route::get('posts', 'PostController@index')->name('posts.index');
 Route::get('posts/{post}', 'PostController@show')->name('posts.show');
 
@@ -33,7 +32,7 @@ Route::put('users/{id}/password-reset', 'UserController@changePass')->name('user
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+
 
 // Products
 Route::get('products', 'ProductController@index')->name('products.index');

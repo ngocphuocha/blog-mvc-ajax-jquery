@@ -13,8 +13,8 @@
     <!-- Tailwind css -->
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 
-    <!-- Jquery ajax -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
 </head>
 
 <body>
@@ -36,7 +36,7 @@
                     @endauth
                     @guest
                     <li><a href="{{ route('login') }}" class="p-2">Login</a></li>
-                    <li><a class="p-2">Register</a></li>
+                    <li><a href="{{ asset('register') }}" class="p-2">Register</a></li>
                     @endguest
 
                 </ul>
@@ -66,9 +66,11 @@
                     </li>
 
                     {{-- Cart --}}
+
                     <li>
                         <a class="px-5 transition duration-150 ease-out hover:text-red-500"
-                            href="{{ route('carts.index') }}">View cart
+                            href="{{ route('carts.index') }}">
+                            View cart
                         </a>
                     </li>
 
@@ -93,6 +95,8 @@
     </main>
     <footer></footer>
     <!-- Script -->
+    <!-- Jquery ajax -->
+    <script src="{{ asset('js/jquery/jquery-3.6.0.min.js') }}"></script>
     @yield('js')
 </body>
 

@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
@@ -28,7 +31,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -68,5 +71,48 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+    }
+    protected function showRegistrationForm()
+    {
+        if (Auth::check()) {
+            return redirect()->back();
+        }
+        return view('register');
+    }
+    protected function register(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|unique:users',
+            'name' => 'required|min:3|max:255',
+            'age' => 'required|numeric',
+            'phone' => 'required|numeric',
+            'address' => 'required',
+            'password' => 'required|confirmed|string|min:15|max:25'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+        DB::beginTransaction();
+
+        try {
+            $data = $request->only(['email', 'password']);
+            $data['password'] = bcrypt($data['password']);
+            $user = User::create($data);
+            $profile = $request->only([
+                'name',
+                'age',
+                'gender',
+                'phone',
+                'address'
+            ]);
+            $user->profile()->create($profile);
+            DB::commit();
+            // all good
+            return response()->json(['success' => $user], 201);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['errors' => $e->getMessage()], 400);
+        }
     }
 }

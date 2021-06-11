@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Order;
 
 class CartController extends Controller
 {
@@ -23,9 +24,10 @@ class CartController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->only(['product_name', 'price', 'quantity']);
+        $data = $request->only(['id', 'product_name', 'price', 'quantity']);
 
         $request->session()->push('cart.products', [
+            'id' => $data['id'],
             'product_name' => $data['product_name'],
             'price' => $data['price'] * $data['quantity'],
             'quantity' => $data['quantity']
@@ -46,9 +48,9 @@ class CartController extends Controller
         return redirect()->back();
     }
 
+    // Get information to comfirm order
     public function pay(Request $request)
     {
-
         if ($request->session()->has('customer')) {
             $request->session()->forget('customer');
         }
@@ -60,10 +62,33 @@ class CartController extends Controller
             'phone' => $data['phone'],
             'address' => $data['address']
         ]);
-        return 'Thanh toán thành công, cảm ơn bạn, chúc bạn một ngày vui vẻ!';
+        $order = Order::create($data);
+        // dd($order->id);
+        if ($request->session()->has('cart.products')) {
+            // dd($request->session()->get('cart.products'));
+            $arr = [];
+            foreach (session()->get('cart.products') as $key => $product) {
+                $arr[] = [
+                    'order_id' => $order->id,
+                    'product_id' => $product['id'],
+                    'quantity' => $product['quantity'],
+                ];
+            }
+        }
+        $order->orderDetails()->insert($arr);
+
+
+        return redirect()->route('carts.print-receipt');
     }
 
-    public function printReceipt()
+    public function printReceipt(Request $request)
     {
+        if ($request->session()->has('customer')) {
+            $order = $request->session()->get('customer');
+
+            return view('carts.print-receipt', compact(['order']));
+        } else {
+            return redirect()->back();
+        }
     }
 }

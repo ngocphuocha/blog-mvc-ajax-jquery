@@ -35,12 +35,6 @@ $(document).ready(function () {
                         $("#result").html(html);
                     });
                 }
-
-                // var html = '<p class="text-center">' + 'Email: ' + '<span class="font-bold text-red-900">' + err.email + '</span>' + '. ' + err.error;
-                // console.log(html);
-                // $("#result").html();
-                // $("#result").html(html);
-
             }
         });
     });
