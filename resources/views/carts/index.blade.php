@@ -4,7 +4,7 @@
 {{-- Content --}}
 @section('content')
 <div class="container mx-auto mt-5 grid grid-cols-1 gap-4">
-    @if (isset($cart))
+    @if (!empty($cart))
     <div class="flex flex-row justify-end">
         <a href="{{ route('carts.checkout') }}"
             class="p-3 rounded-sm shadow-inner transition duration-700 ease-in-out bg-blue-200 hover:bg-blue-400 transform hover:-translate-y-2">Thanh

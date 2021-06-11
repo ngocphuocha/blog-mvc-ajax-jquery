@@ -77,18 +77,17 @@ class CartController extends Controller
         }
         $order->orderDetails()->insert($arr);
 
-
         return redirect()->route('carts.print-receipt');
     }
 
     public function printReceipt(Request $request)
     {
-        if ($request->session()->has('customer')) {
-            $order = $request->session()->get('customer');
-
-            return view('carts.print-receipt', compact(['order']));
+        if ($request->session()->has('customer') && $request->session()->has('cart.products')) {
+            $customer = $request->session()->pull('customer');
+            $products = $request->session()->pull('cart.products');
+            return view('carts.print-receipt', compact(['customer', 'products']));
         } else {
-            return redirect()->back();
+            return redirect()->route('carts.index');
         }
     }
 }
