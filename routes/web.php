@@ -57,3 +57,10 @@ Route::get('carts/checkout', 'CartController@checkout')->name('carts.checkout');
 Route::post('carts/checkout', 'CartController@pay')->name('carts.pay');
 
 Route::get('carts/checkout/print-receipt', 'CartController@printReceipt')->name('carts.print-receipt');
+
+
+// Verify email view
+Route::get('users/verify-email', 'UserController@verifyEmail')->name('mails.verify');
+
+// Update status verify
+Route::put('users/{user}/verify-email', 'UserController@updateVerifyStatus')->name('mails.update-verify-status');

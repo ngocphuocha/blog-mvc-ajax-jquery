@@ -7,9 +7,17 @@ use App\User;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->only([
+            'verifyEmail',
+            'updateVerifyStatus'
+        ]);
+    }
     public function forgotPass()
     {
         return view('users.forgot-password');
@@ -32,13 +40,12 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json([$validator->errors()], 400);
         } else {
-            $user = User::where('email', $request->input('email'))->select('id', 'email', 'name')->get();
+            $user = User::where('email', $request->input('email'))->select('id', 'email')->get();
             $id = $user[0]->id;
             $data = [];
             // Generate new link for reset password
             $link = URL::temporarySignedRoute('users.reset-pass', now()->addMinute(3), ['id' => $id]);
             $data['id'] = $id;
-            $data['name'] = $user[0]->name;
             $data['email'] = $user[0]->email;
             $data['link'] = $link;
             Mail::send('mails.reset-pass', $data, function ($message) use ($data) {
@@ -69,5 +76,26 @@ class UserController extends Controller
             $user = User::where('id', $id)->update(['password' => $password]);
             return response()->json($user, 200);
         }
+    }
+
+    public function verifyEmail()
+    {
+        $data = [];
+        $data['id'] = Auth::id();
+        $data['email'] = Auth::user()->email;
+        $linkVerify = URL::signedRoute('mails.update-verify-status', ['user' => $data['id']]);
+        $data['linkVerify'] = $linkVerify;
+
+        Mail::send('mails.verify-email', $data, function ($message) use ($data) {
+            $message->to($data['email'], 'Admin Phuoc Tran')->subject('Verify your email!');
+            $message->from('testfaifoo@gmail.com', 'Admin');
+        });
+        $message = 'We have send mail verity to ' . $data['email'];
+        return response()->json(['sucess' => $message], 200);
+    }
+    public function updateVerifyStatus(User $user)
+    {
+        User::where('id', $user->id)->update(['email_verified_at' => now()]);
+        return 'Verify your email success';
     }
 }

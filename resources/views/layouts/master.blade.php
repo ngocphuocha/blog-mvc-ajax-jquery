@@ -32,6 +32,13 @@
                                 type="submit" value="Logout">
                         </form>
                         </li>
+                        @if (\Auth::user()->email_verified_at === null)
+                        <li class="p-2 my-1">
+                            <a id="send-mail-verify" href="{{ route('mails.verify') }}"
+                                class="bg-green-300 p-2 rounded-sm my-1 mr-2 cursor-pointer hover:text-yellow-300 transition delay-150 duration-300 ease-in-out">Verify
+                                your account now</a>
+                        </li>
+                        @endif
                     </ul>
                     @endauth
                     @guest
@@ -97,6 +104,7 @@
     <!-- Script -->
     <!-- Jquery ajax -->
     <script src="{{ asset('js/jquery/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ asset('js/verify-email.js') }}"></script>
     @yield('js')
 </body>
 
